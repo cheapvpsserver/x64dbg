@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>x64dbg - Powerful Open Source Debugger | Windows Support</title>
+    <!-- Website Description -->
+    <meta name="description" content="x64dbg is a powerful open source debugger designed for Windows systems, providing professional debugging features, supporting 64-bit and 32-bit applications, ideal for reverse engineering and software analysis.">
+    <!-- 网站图标 -->
+    <link rel="icon" type="image/x-icon" href="../images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon.png">
+    <!-- 引入Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+     // 1. Disable right-click menu
+     document.addEventListener('contextmenu', function(e) {
+         e.preventDefault();
+         alert('Right-click menu is disabled');
+     });
+
+     // 2. Disable text selection
+     document.addEventListener('selectstart', function(e) {
+         e.preventDefault();
+     });
+
+     // 3. Disable copy shortcuts
+     document.addEventListener('keydown', function(e) {
+         if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'a')) {
+             e.preventDefault();
+             alert('Copy function is disabled');
+         }
+     });
+
+     // 4. Prevent opening developer tools via F12
+     document.addEventListener('keydown', function(e) {
+         if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+             e.preventDefault();
+             alert('Developer tools are disabled');
+         }
+     });
+ </script>
+    <style>
+    /* 基础样式重置 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f5f8ff;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* 全局容器 */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* 导航栏样式 */
+    nav {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #1a1a1a;
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .nav-logo-img {
+      width: 200px;
+      height: 50px;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: #666;
+      font-size: 16px;
+      transition: color 0.3s ease;
+      font-weight: normal;
+    }
+
+    .nav-menu a:hover {
+      color: #4683f4;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 16px;
+    }
+
+    /* 头部样式 */
+    header {
+      padding: 40px 0;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .download-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    /* 按钮基础样式 */
+    .btn {
+      padding: 10px 24px;
+      border-radius: 24px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    /* 按钮图标样式 */
+    .btn i {
+      margin-right: 8px;
+    }
+
+    .btn-blue {
+      background-color: #4683f4;
+      color: white;
+    }
+
+    .btn-blue:hover {
+      background-color: #3366cc;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: #4683f4;
+      border: 1px solid #4683f4;
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(70, 131, 244, 0.1);
+    }
+
+    /* 主banner视频样式 */
+    .hero-screenshot {
+      width: 1000px;
+      max-width: 100%;
+      height: 600px;
+      margin: 0 auto;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      background-color: #f0f0f0;
+    }
+    
+    /* 视频容器相对定位 */
+    .video-container {
+      position: relative;
+      cursor: pointer;
+    }
+    
+    /* 视频覆盖层 */
+    .video-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+    }
+    
+    /* 覆盖层文字样式 */
+    .overlay-text {
+      color: white;
+      font-size: 36px;
+      font-weight: 600;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* 隐藏覆盖层 */
+    .video-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* 下载模态框样式 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(3px);
+    }
+
+    /* 模态框内容 */
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 30px;
+      border: none;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      animation: modalFadeIn 0.3s ease;
+      position: relative;
+    }
+
+    /* 模态框动画 */
+    @keyframes modalFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 关闭按钮 */
+    .close-btn {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      position: absolute;
+      top: 15px;
+      right: 20px;
+    }
+
+    .close-btn:hover {
+      color: #333;
+    }
+
+    /* 模态框标题 */
+    .modal-content h3 {
+      margin-top: 0;
+      margin-bottom: 25px;
+      font-size: 20px;
+      color: #333;
+      text-align: center;
+    }
+
+    /* 下载选项列表 */
+    .download-options {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* 单个选项样式 */
+    .option-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+    }
+
+    .option-item:hover {
+      background-color: #e9ecef;
+    }
+
+    /* 选项名称 */
+    .option-name {
+      font-size: 16px;
+      color: #333;
+      font-weight: 500;
+      flex: 1;
+      min-width: 100px;
+    }
+
+    /* 下载按钮样式调整 */
+    .option-btn {
+      min-width: 120px;
+      max-width: 140px;
+      text-align: center;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* 特性区块 */
+    .features {
+      padding: 80px 0;
+    }
+
+    .feature-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, #F7FAFD 0%, #F7F9FC 100%);
+      border-radius: 16px;
+      padding: 48px;
+      margin-bottom: 40px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      height: 540px;
+      gap: 80px;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .feature-card.reverse {
+      flex-direction: row-reverse;
+    }
+
+    /* 核心修改：标题和描述容器固定400px宽度 */
+    .feature-text {
+      flex: none; /* 取消弹性伸缩，固定宽度 */
+      width: 400px; /* 固定宽度400px */
+      padding: 0;
+    }
+
+    .feature-text h2 {
+      font-size: 36px;
+      font-weight: normal;
+      margin-bottom: 16px;
+      color: #1a1a1a;
+    }
+
+    .feature-text p {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 24px;
+      line-height: 1.8;
+      /* 自动换行，不限制行数 */
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+    }
+
+    /* 图片容器 - 单独背景 */
+    .feature-img-wrapper {
+      flex: none;
+      width: 570px;
+      height: 400px;
+      background-color: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 图片固定尺寸 */
+    .feature-screenshot {
+      width: 480px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      display: block;
+    }
+
+    /* 底部 CTA */
+    .cta {
+      padding: 0 0 80px 0;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: 28px;
+      margin-bottom: 32px;
+    }
+
+    /* 页脚 */
+    footer {
+      padding: 40px 0;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      border-top: 1px solid #e8e8e8;
+    }
+    
+    /* 友情链接样式 */
+    .footer-links {
+      margin-bottom: 20px;
+    }
+    
+    .footer-links a {
+      color: #ccc;
+      text-decoration: none;
+      margin: 0 12px;
+      font-size: 12px;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: #4683f4;
+    }
+    
+    /* 右侧功能按钮样式 */
+    .side-tools {
+      position: fixed;
+      right: 250px;
+      bottom: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 99;
+    }
+    
+    /* 移动端适配 */
+    @media (max-width: 1200px) {
+      .side-tools {
+        right: 30px;
+        bottom: 30px;
+      }
+    }
+    
+    /* 右侧功能按钮 */
+    .side-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: #4683f4;
+      border: none;
+      box-shadow: 0 2px 12px rgba(70, 131, 244, 0.3);
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      text-align: center;
+    }
+    
+    .side-btn:hover {
+      background-color: #3366cc;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(51, 102, 204, 0.4);
+    }
+    
+    .side-btn.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* 语言切换按钮样式 */
+    .lang-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    
+    .lang-top, .lang-bottom {
+      position: relative;
+      font-size: 12px;
+      font-weight: 500;
+      width: 100%;
+      text-align: center;
+      padding: 3px 0;
+      z-index: 1;
+    }
+    
+    /* 为语言切换按钮添加上下分割线 */
+    .side-btn#language-switch::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: rgba(255, 255, 255, 0.5);
+      z-index: 0;
+    }
+    
+    /* 调整语言切换按钮的高度和定位 */
+    .side-btn#language-switch {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative; /* 确保伪元素能正确定位 */
+      overflow: visible; /* 确保伪元素能显示出来 */
+    }
+    
+    /* 为语言切换按钮添加上下分割线 */
+    .side-btn#language-switch::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      width: 80%;
+      height: 1px;
+      background-color: rgba(255, 255, 255, 0.8); /* 增加透明度，让分割线更明显 */
+      z-index: 2; /* 提高层级，确保分割线显示在文字上方 */
+    }
+
+    /* 响应式适配 - 移动端优化 */
+    @media (max-width: 1200px) {
+      .feature-card {
+        height: auto;
+        min-height: 540px;
+        padding: 32px 20px;
+        gap: 40px;
+        flex-wrap: wrap; /* 允许换行 */
+        justify-content: center;
+      }
+      
+      .feature-text {
+        width: 100%; /* 中屏宽度100% */
+        max-width: 400px;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      
+      .feature-img-wrapper {
+        width: 80%;
+        max-width: 570px;
+        margin: 0 auto;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+      
+      .feature-card, .feature-card.reverse {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 16px;
+        gap: 32px;
+      }
+
+      .feature-text {
+        width: 100%; /* 移动端宽度100% */
+        max-width: 400px;
+        padding: 0;
+        margin-bottom: 20px;
+      }
+
+      .feature-img-wrapper {
+        width: 100%;
+        height: 300px;
+        padding: 20px;
+      }
+
+      .feature-screenshot {
+        width: 100%;
+        height: auto;
+        max-height: 260px;
+      }
+
+      .feature-text h2 {
+        font-size: 28px;
+        font-weight: normal;
+      }
+
+      .feature-text p {
+        font-size: 16px;
+      }
+
+      .hero-screenshot {
+        width: 100%;
+        height: auto;
+        min-height: 300px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .feature-img-wrapper {
+        height: 250px;
+      }
+      
+      header h1 {
+        font-size: 24px;
+      }
+      
+      .download-buttons {
+        flex-direction: column;
+        width: 80%;
+        margin: 0 auto 40px;
+      }
+      
+      .btn {
+        display: block;
+        width: 100%;
+      }
+    }
+  </style>
+  <!-- 在现有script标签前添加 -->
+
+</head>
+<body>
+  <!-- 导航栏 -->
+  <nav>
+    <div class="nav-container">
+      <a href="/en/" class="nav-logo">
+        <img src="../images/logo.png" alt="x64dbg" class="nav-logo-img">
+      </a>
+      <div class="nav-menu">
+        <!-- <a href="#">首页</a> -->
+        <!-- <a href="#">功能介绍</a> -->
+        <!-- <a href="#">帮助中心</a> -->
+      </div>
+      <div class="nav-actions">
+        <a href="#download-section" class="btn btn-blue">Download</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- 头部区域 - 已删除logo -->
+    <header>
+      <h1>x64dbg - Powerful Open Source Debugger</h1>
+      <div class="download-buttons">
+        <a href="/en/x64dbg-windows" class="btn btn-outline" data-platform="windows" data-title="x64dbg Windows Download | Powerful Open Source Debugger" data-description="x64dbg Windows is a powerful open source debugger designed for Windows systems, providing professional debugging features, supporting 64-bit and 32-bit applications, ideal for reverse engineering and software analysis.">
+          <i class="fab fa-windows"></i> Windows
+        </a>
+        <a href="https://all.calipertools.com" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+          <i class="fas fa-tools"></i> All Tools
+        </a>
+      </div>
+      <!-- 最新版本提示 -->
+      <div style="display: flex; justify-content: center; align-items: center; margin: 5px auto 20px;">
+        <i class="fas fa-check-circle" style="color: #4CAF50; margin-right: 8px;"></i>
+        <span style="color: #666;">Current tool is the latest version</span>
+      </div>
+      <!-- 主banner视频 - Bilibili嵌入 -->
+      <div class="hero-screenshot video-container">
+        <!-- Bilibili播放器 -->
+        <iframe id="bilibili-player" src="//player.bilibili.com/player.html?isOutside=true&aid=115994601200377&bvid=BV1hZ64BfEP4&cid=35750283791&p=1&autoplay=0&loop=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="width: 100%; height: 100%; min-height: 300px;"></iframe>
+      </div>
+    </header>
+
+    <!-- Features Section -->
+    <section class="features">
+      <!-- Support for 64-bit and 32-bit Applications -->
+      <div class="feature-card">
+        <div class="feature-text">
+          <h2>Support for 64-bit and 32-bit Applications</h2>
+          <p>Supports debugging of both 64-bit and 32-bit Windows applications, providing a unified debugging experience to meet different debugging needs.</p>
+        </div>
+        <div class="feature-img-wrapper">
+          <img src="../images/img/1.png" alt="Support for 64-bit and 32-bit Applications" class="feature-screenshot">
+        </div>
+      </div>
+
+      <!-- Powerful Breakpoint System -->
+      <div class="feature-card reverse">
+        <div class="feature-text">
+          <h2>Powerful Breakpoint System</h2>
+          <p>Supports multiple breakpoint types including hardware breakpoints, software breakpoints, memory breakpoints, etc. Can set conditional breakpoints and log breakpoints for precise control of program execution flow.</p>
+        </div>
+        <div class="feature-img-wrapper">
+          <img src="../images/img/2.png" alt="Powerful Breakpoint System" class="feature-screenshot">
+        </div>
+      </div>
+
+      <!-- Memory and Register Operations -->
+      <div class="feature-card">
+        <div class="feature-text">
+          <h2>Memory and Register Operations</h2>
+          <p>Real-time viewing and modification of memory content and register status, supporting memory dumps and editing, helping to deeply analyze program runtime status.</p>
+        </div>
+        <div class="feature-img-wrapper">
+          <img src="../images/img/3.png" alt="Memory and Register Operations" class="feature-screenshot">
+        </div>
+      </div>
+
+      <!-- Disassembly and Assembly Features -->
+      <div class="feature-card reverse">
+        <div class="feature-text">
+          <h2>Disassembly and Assembly Features</h2>
+          <p>Provides a powerful disassembly engine, supports multiple instruction sets, can view and modify assembly code, and preview modification effects in real-time.</p>
+        </div>
+        <div class="feature-img-wrapper">
+          <img src="../images/img/4.png" alt="Disassembly and Assembly Features" class="feature-screenshot">
+        </div>
+      </div>
+
+      <!-- Plugin System -->
+      <div class="feature-card">
+        <div class="feature-text">
+          <h2>Plugin System</h2>
+          <p>Supports plugin extension functionality, can add new debugging features and analysis tools through plugins to meet specific domain debugging needs.</p>
+        </div>
+        <div class="feature-img-wrapper">
+          <img src="../images/img/5.png" alt="Plugin System" class="feature-screenshot">
+        </div>
+      </div>
+
+      <!-- Script Support -->
+      <div class="feature-card reverse">
+        <div class="feature-text">
+          <h2>Script Support</h2>
+          <p>Built-in script engine, supports JavaScript for writing debugging scripts, can automate repetitive debugging tasks to improve debugging efficiency.</p>
+        </div>
+        <div class="feature-img-wrapper">
+          <img src="../images/img/6.png" alt="Script Support" class="feature-screenshot">
+        </div>
+      </div>
+
+      <!-- Open Source and Free -->
+      <div class="feature-card">
+        <div class="feature-text">
+          <h2>Open Source and Free</h2>
+          <p>Completely open source and free, no hidden costs, community-driven development, continuously updated and improved, supporting Windows systems, ideal for reverse engineering and software analysis.</p>
+        </div>
+        <div class="feature-img-wrapper">
+          <img src="../images/img/7.png" alt="Open Source and Free" class="feature-screenshot">
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="cta" id="download-section">
+      <h2>Start using x64dbg for professional debugging!</h2>
+      <div class="download-buttons">
+        <a href="/en/x64dbg-windows" class="btn btn-outline" data-platform="windows" data-title="x64dbg Windows Download | Powerful Open Source Debugger" data-description="x64dbg Windows is a powerful open source debugger designed for Windows systems, providing professional debugging features, supporting 64-bit and 32-bit applications, ideal for reverse engineering and software analysis.">
+          <i class="fab fa-windows"></i> Windows
+        </a>
+        <a href="https://all.calipertools.com" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+          <i class="fas fa-tools"></i> All Tools
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-links">
+        <a href="https://www.calipertools.com/">CaliperTools</a>
+        <a href="https://emoji.calipertools.com/">Emoji</a>
+        <a href="https://IndexTTS.calipertools.com/">IndexTTS</a>
+        <a href="https://VoxCPM.calipertools.com/">VoxCPM</a>
+        <a href="https://CosyVoice.calipertools.com/">CosyVoice</a>
+      </div>
+      <p>© 2025 CaliperTools. All rights reserved. Precision tools for everyone.</p>
+    </footer>
+  </div>
+
+  <!-- Download Selection Modal -->
+      <div id="download-modal" class="modal">
+        <div class="modal-content">
+          <!-- Close Button -->
+          <span class="close-btn" id="close-modal">&times;</span>
+          <!-- Title -->
+          <h3>Choose Download Method</h3>
+          <!-- Cloud Storage Options (Dynamically Generated) -->
+          <div class="download-options" id="download-options">
+            <!-- Dynamically generated cloud storage options will appear here -->
+          </div>
+        </div>
+      </div>
+
+  <!-- Right Side Functional Buttons -->
+  <div class="side-tools">
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="side-btn" title="Back to Top">
+      <i class="fas fa-chevron-up"></i>
+    </button>
+    
+    <!-- Language Switch Button -->
+    <button id="language-switch" class="side-btn" title="Switch Language" data-lang="en">
+      <div class="lang-container">
+        <span class="lang-top" style="color: white;">EN</span>
+        <span class="lang-bottom" style="color: white;">中文</span>
+      </div>
+    </button>
+  </div>
+
+  <script>
+    // 添加平滑滚动效果
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // 添加图片懒加载
+    if ('loading' in HTMLImageElement.prototype) {
+      document.querySelectorAll('img').forEach(img => {
+        img.loading = 'lazy';
+      });
+    } else {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+      document.body.appendChild(script);
+    }
+
+    // 设备检测 - 根据设备类型调整下载按钮显示
+    document.addEventListener('DOMContentLoaded', function() {
+      const userAgent = navigator.userAgent.toLowerCase();
+      const windowsBtn = document.querySelector('.cta .btn-blue');
+      const macBtn = document.querySelector('.cta .btn-outline');
+      
+      // 保持两个按钮都显示，用户可以自由选择
+      // 这里可以根据需要添加其他逻辑，比如高亮显示对应设备的按钮
+    });
+    
+    // 回到顶部功能
+    const backToTopBtn = document.getElementById('back-to-top');
+    const langSwitchBtn = document.getElementById('language-switch');
+    
+    // 初始化：语言切换按钮始终显示
+    langSwitchBtn.classList.add('show');
+    
+    // 监听滚动事件，显示/隐藏回到顶部按钮
+    window.addEventListener('scroll', function() {
+      if (window.pageYOffset > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    });
+    
+    // 点击回到顶部
+    backToTopBtn.addEventListener('click', function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // 语言切换功能 - 单个按钮点击切换
+    langSwitchBtn.addEventListener('click', function() {
+      const currentLang = this.getAttribute('data-lang');
+      
+      if (currentLang === 'en') {
+        // 从英文切换到中文，跳转到根目录
+        window.location.href = '/';
+      } else {
+        // 从中文切换到英文，跳转到en文件夹
+        window.location.href = '/en/';
+      }
+    });
+    
+    // 视频播放器引用
+    const bilibiliPlayer = document.getElementById('bilibili-player');
+    
+    // 下载模态框逻辑
+    const downloadModal = document.getElementById('download-modal');
+    const closeModal = document.getElementById('close-modal');
+    
+    // 功能映射表 - 每个功能对应的数据
+    const featureData = {
+      'x64dbg-windows': {
+        platform: 'windows',
+        title: 'x64dbg Windows Download | Powerful Open Source Debugger',
+        description: 'x64dbg Windows is a powerful open source debugger designed for Windows systems, providing professional debugging features, supporting 64-bit and 32-bit applications, ideal for reverse engineering and software analysis.',
+        links: {
+          'TeraBox': 'https://1024terabox.com/s/1-51ciDTQIjfbjWVsLvZd6g',
+        }
+      }
+    };
+    
+    // 从URL中获取当前功能
+    function getCurrentFeature() {
+      const path = window.location.pathname.replace(/\/$/, '');
+      const slug = path.split('/').pop();
+      return featureData[slug];
+    }
+    
+    // 获取所有下载按钮和选项容器
+    const downloadButtons = document.querySelectorAll('.download-buttons .btn');
+    const downloadOptionsContainer = document.getElementById('download-options');
+    
+    // 动态生成下载选项
+    function generateDownloadOptions(feature) {
+      // 清空容器
+      downloadOptionsContainer.innerHTML = '';
+      
+      // 获取该功能的下载链接
+      const links = feature.links;
+      
+      // 遍历链接，生成选项
+      for (const [name, url] of Object.entries(links)) {
+        const optionItem = document.createElement('div');
+        optionItem.className = 'option-item';
+        
+        // 根据平台获取显示名称
+        const platformName = {
+          'windows-64': 'Windows 64-bit',
+          'windows-32': 'Windows 32-bit',
+          'windows-portable': 'Windows 64-bit Portable'
+        }[feature.platform];
+        
+        // 使用原始链接，不添加平台信息
+        optionItem.innerHTML = `
+          <span class="option-name">${name}</span>
+          <a href="${url}" class="btn btn-blue option-btn" target="_blank" rel="noopener noreferrer nofollow">Download Now</a>
+        `;
+        
+        downloadOptionsContainer.appendChild(optionItem);
+      }
+    }
+    
+    // 更新页面标题和描述
+    function updatePageInfo(feature) {
+      // 更新页面标题
+      if (feature.title) {
+        document.title = feature.title;
+      }
+      
+      // 更新meta描述
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription && feature.description) {
+        metaDescription.content = feature.description;
+      }
+    }
+    
+    // 初始化页面，根据URL显示对应内容
+    function initPage() {
+      const feature = getCurrentFeature();
+      if (feature) {
+        // 更新页面标题和描述
+        updatePageInfo(feature);
+        
+        // 高亮对应的下载按钮
+        const button = document.querySelector(`.download-buttons .btn[data-platform="${feature.platform}"]`);
+        if (button) {
+          // 1. 先将所有按钮恢复为btn-outline样式
+          downloadButtons.forEach(btn => {
+            btn.classList.remove('btn-blue');
+            btn.classList.add('btn-outline');
+          });
+          
+          // 2. 将当前按钮设置为btn-blue样式
+          button.classList.remove('btn-outline');
+          button.classList.add('btn-blue');
+          
+          // 计算链接数量
+          const linkCount = Object.keys(feature.links).length;
+          
+          if (linkCount === 1) {
+            // 只有一个链接，不自动打开，让用户手动点击
+          } else {
+            // 多个链接，生成选项并显示模态框
+            generateDownloadOptions(feature);
+            downloadModal.style.display = 'block';
+          }
+        }
+      }
+    }
+    
+    // 页面加载时初始化
+    window.addEventListener('DOMContentLoaded', initPage);
+    
+    // 为每个下载按钮添加点击事件
+    downloadButtons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        // 检查是否是"所有工具"按钮，如果是则不阻止默认行为
+        if (this.getAttribute('href') === 'https://all.calipertools.com') {
+          return; // 直接返回，不阻止默认行为
+        }
+        
+        // 阻止默认行为，防止页面跳转
+        e.preventDefault();
+        
+        // 获取当前平台
+        const platform = this.getAttribute('data-platform');
+        
+        // 查找对应的功能数据
+        const slug = `x64dbg-${platform}`;
+        const feature = featureData[slug];
+        
+        if (feature) {
+          // 更新页面URL但不刷新页面
+          const newUrl = `/en/${slug}`;
+          history.pushState({ slug }, feature.title, newUrl);
+          
+          // 更新页面标题和描述
+          updatePageInfo(feature);
+          
+          // 高亮对应的下载按钮
+          downloadButtons.forEach(btn => {
+            btn.classList.remove('btn-blue');
+            btn.classList.add('btn-outline');
+          });
+          this.classList.remove('btn-outline');
+          this.classList.add('btn-blue');
+          
+          // 计算链接数量
+          const linkCount = Object.keys(feature.links).length;
+          
+          if (linkCount === 1) {
+            // 只有一个链接，在新窗口打开
+            const firstLink = Object.values(feature.links)[0];
+            
+            // 根据平台获取显示名称
+            const platformName = {
+              'windows-64': 'Windows 64-bit',
+              'windows-32': 'Windows 32-bit',
+              'windows-portable': 'Windows 64-bit Portable'
+            }[platform];
+            
+            // 使用原始链接，不添加平台信息
+            // 在新窗口打开链接
+            window.open(firstLink, '_blank', 'noopener,noreferrer');
+          } else {
+            // 多个链接，生成选项并显示模态框
+            generateDownloadOptions(feature);
+            downloadModal.style.display = 'block';
+          }
+        }
+      });
+    });
+    
+    // 添加popstate事件监听器，处理浏览器前进后退
+    window.addEventListener('popstate', function(e) {
+      // 重新初始化页面，根据新的URL显示对应内容
+      initPage();
+    });
+    
+    // 关闭模态框
+    function closeDownloadModal() {
+      downloadModal.style.display = 'none';
+    }
+    
+    // 点击关闭按钮
+    closeModal.addEventListener('click', closeDownloadModal);
+    
+    // 点击模态框外部
+    window.addEventListener('click', function(e) {
+      if (e.target === downloadModal) {
+        closeDownloadModal();
+      }
+    });
+  </script>
+</body>
+</html>
