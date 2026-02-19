@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Adobe Acrobat Pro DC</title>
+    <!-- Website description -->
+    <meta name="description" content="About Adobe Acrobat Pro DC website information, including disclaimer and terms of use.">
+    <!-- Website icon -->
+    <link rel="icon" type="image/x-icon" href="../images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../images/favicon.png">
+    <!-- Import Font Awesome icon library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+    /* Basic style reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    body {
+      background-color: #f5f8ff;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Global container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Navigation bar style */
+    nav {
+      background-color: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 16px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #1a1a1a;
+      font-weight: 600;
+      font-size: 18px;
+    }
+
+    .nav-logo-img {
+      width: 200px;
+      height: 50px;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: #666;
+      font-size: 16px;
+      transition: color 0.3s ease;
+      font-weight: normal;
+    }
+
+    .nav-menu a:hover {
+      color: #4683f4;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 16px;
+    }
+
+    /* Button basic style */
+    .btn {
+      padding: 10px 24px;
+      border-radius: 24px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    /* Button icon style */
+    .btn i {
+      margin-right: 8px;
+    }
+
+    .btn-blue {
+      background-color: #4683f4;
+      color: white;
+    }
+
+    .btn-blue:hover {
+      background-color: #3366cc;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: #4683f4;
+      border: 1px solid #4683f4;
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(70, 131, 244, 0.1);
+    }
+
+    /* Content area */
+    .content {
+      padding: 60px 0;
+    }
+
+    .content h1 {
+      font-size: 36px;
+      font-weight: 600;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .content h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin: 30px 0 20px;
+    }
+
+    .content p {
+      margin-bottom: 20px;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .content-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      border-top: 1px solid #e8e8e8;
+    }
+    
+    /* Footer links style */
+    .footer-links {
+      margin-bottom: 20px;
+    }
+    
+    .footer-links a {
+      color: #ccc;
+      text-decoration: none;
+      margin: 0 12px;
+      font-size: 12px;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: #4683f4;
+    }
+    
+    /* Right side tool buttons style */
+    .side-tools {
+      position: fixed;
+      right: 250px;
+      bottom: 300px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      z-index: 99;
+    }
+    
+    /* Mobile adaptation */
+    @media (max-width: 1200px) {
+      .side-tools {
+        right: 30px;
+        bottom: 30px;
+      }
+    }
+    
+    /* Right side tool buttons */
+    .side-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background-color: #4683f4;
+      border: none;
+      box-shadow: 0 2px 12px rgba(70, 131, 244, 0.3);
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      text-align: center;
+    }
+    
+    .side-btn:hover {
+      background-color: #3366cc;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(51, 102, 204, 0.4);
+    }
+    
+    .side-btn.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Language switch button style */
+    .lang-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    
+    .lang-top, .lang-bottom {
+      position: relative;
+      font-size: 12px;
+      font-weight: 500;
+      width: 100%;
+      text-align: center;
+      padding: 3px 0;
+      z-index: 1;
+    }
+    
+    /* Add top and bottom dividing line for language switch button */
+    .side-btn#language-switch::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      width: 80%;
+      height: 1px;
+      background-color: rgba(255, 255, 255, 0.8);
+      z-index: 2;
+    }
+
+    /* Responsive adaptation */
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+      
+      .content h1 {
+        font-size: 28px;
+      }
+      
+      .content-container {
+        padding: 24px;
+      }
+    }
+</style>
+</head>
+<body>
+  <!-- Navigation bar -->
+  <nav>
+    <div class="nav-container">
+      <a href="/en/" class="nav-logo">
+        <img src="../images/logo.png" alt="Adobe Acrobat Pro DC" class="nav-logo-img">
+      </a>
+      <div class="nav-menu">
+        <a href="/en/">Home</a>
+        <a href="/en/about">About</a>
+        <a href="/en/privacy">Privacy</a>
+      </div>
+      <div class="nav-actions">
+        <a href="/en/" class="btn btn-blue">Back to Home</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Content area -->
+    <section class="content">
+      <div class="content-container">
+        <h1>About This Website</h1>
+        
+        <h2>Website Purpose</h2>
+        <p>This website aims to provide download links for Adobe Acrobat Pro DC software, making it easier for users to obtain this professional PDF editing and management tool.</p>
+        
+        <h2>Disclaimer</h2>
+        <p>This site only provides links to publicly available software. We do not modify any files, collect personal information, or require login.</p>
+        <p>We do not guarantee the security, integrity, or availability of the software. Before using any software, please ensure you understand the relevant risks and comply with the software's license agreement.</p>
+        <p>This website is not affiliated with Adobe Inc. All trademarks and product names are the property of their respective owners.</p>
+        
+        <h2>Terms of Use</h2>
+        <p>By accessing and using this website, you agree to comply with the following terms:</p>
+        <p>1. The links provided on this website are for personal use only and may not be used for commercial purposes.</p>
+        <p>2. Please respect software intellectual property rights and use software only in accordance with the license agreement.</p>
+        <p>3. This website is not responsible for any loss or damage caused by the use or inability to use the links provided on this website.</p>
+        
+        <h2>Contact Us</h2>
+        <p>If you have any questions or suggestions about this website, please contact us through the following:</p>
+        <p><a href="https://www.calipertools.com/" target="_blank" rel="noopener noreferrer">CaliperTools Official Website</a></p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-links">
+        <a href="https://www.calipertools.com/">CaliperTools</a>
+        <a href="https://emoji.calipertools.com/">Emoji</a>
+        <a href="https://IndexTTS.calipertools.com/">IndexTTS</a>
+        <a href="https://VoxCPM.calipertools.com/">VoxCPM</a>
+        <a href="https://CosyVoice.calipertools.com/">CosyVoice</a>
+        <a href="/en/about">About</a>
+        <a href="/en/privacy">Privacy</a>
+      </div>
+      <div style="margin: 20px 0;">
+        <p>This site only provides links to publicly available software.</p>
+        <p>We do not modify any files.</p>
+        <p>No personal information is collected.</p>
+        <p>No login is required.</p>
+        <p>No security guarantee (disclaimer)</p>
+        <p>Download source: Official website</p>
+        <p>This site does not host any executable files.</p>
+      </div>
+      <p>© 2025 CaliperTools. All rights reserved. Precision tools for everyone.</p>
+    </footer>
+  </div>
+
+  <!-- Right side tool buttons -->
+  <div class="side-tools">
+    <!-- Back to top button -->
+    <button id="back-to-top" class="side-btn" title="Back to top">
+      <i class="fas fa-chevron-up"></i>
+    </button>
+    
+    <!-- Language switch button -->
+    <button id="language-switch" class="side-btn" title="Switch language" data-lang="en">
+      <div class="lang-container">
+        <span class="lang-top" style="color: white;">EN</span>
+        <span class="lang-bottom" style="color: white;">中文</span>
+      </div>
+    </button>
+  </div>
+
+  <script>
+    // Add smooth scrolling effect
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Back to top functionality
+    const backToTopBtn = document.getElementById('back-to-top');
+    const langSwitchBtn = document.getElementById('language-switch');
+    
+    // Initialization: language switch button always displayed
+    langSwitchBtn.classList.add('show');
+    
+    // Listen for scroll events, show/hide back to top button
+    window.addEventListener('scroll', function() {
+      if (window.pageYOffset > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    });
+    
+    // Click back to top
+    backToTopBtn.addEventListener('click', function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Language switch functionality - single button click to switch
+    langSwitchBtn.addEventListener('click', function() {
+      const currentLang = this.getAttribute('data-lang');
+      
+      if (currentLang === 'en') {
+        // Switch from English to Chinese, jump to root directory
+        window.location.href = '/about';
+      } else {
+        // Switch from Chinese to English, jump to en folder
+        window.location.href = '/en/about';
+      }
+    });
+  </script>
+</body>
+</html>
